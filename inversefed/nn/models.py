@@ -6,6 +6,7 @@ import torch.nn as nn
 
 from torchvision.models.resnet import Bottleneck
 from .revnet import iRevNet
+from .myresnet import myResNet
 from .densenet import _DenseNet, _Bottleneck
 
 from collections import OrderedDict
@@ -86,6 +87,8 @@ def construct_model(model, num_classes=10, seed=None, num_channels=3, modelkey=N
             ('linear3', torch.nn.Linear(width, num_classes))]))
     elif model == 'ResNet20':
         model = ResNet(torchvision.models.resnet.BasicBlock, [3, 3, 3], num_classes=num_classes, base_width=16)
+    elif model == 'myResNet20': # my ResNet20 implementation with group normalization
+        model = myResNet(layers=[3, 3, 3], num_classes=num_classes, norm_layer="gn", groups=2)
     elif model == 'ResNet20-nostride':
         model = ResNet(torchvision.models.resnet.BasicBlock, [3, 3, 3], num_classes=num_classes, base_width=16,
                        strides=[1, 1, 1, 1])
